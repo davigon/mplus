@@ -1,0 +1,7 @@
+version: "3.5"
+services:
+  mplus:
+    container_name: mplus
+    image: mplus:latest
+    ports:
+      - "9999:4000"
