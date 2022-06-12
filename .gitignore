@@ -1,3 +1,5 @@
+firebase.config.json
+
 lib-cov
 *.seed
 *.log
