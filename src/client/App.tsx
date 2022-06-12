@@ -9,7 +9,7 @@ import theme from "./theme"
 
 export const App = () => {
   return (
-    <ChakraProvider>
+    <ChakraProvider theme={theme}>
       <ColorModeScript initialColorMode={theme.config.initialColorMode} />
       <div className="App">
         <Navbar />
