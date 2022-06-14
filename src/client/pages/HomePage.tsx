@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect, useState } from "react"
 import {
   Box,
   Text,
@@ -10,23 +10,21 @@ import {
   VStack,
   Code,
   useToast,
+  Grid,
+  SimpleGrid,
 } from "@chakra-ui/react"
 
 export const HomePage = () => {
-  const toast = useToast()
-  
-  const handleOnClickEpg = (url: string) => {
-    toast.closeAll()
-    navigator.clipboard.writeText(url)
-    toast({
-      title: "Enlace copiado",
-      description: `Se ha copiado el enlace al portapapeles`,
-      status: "info",
-      duration: 3000,
-      isClosable: true,
-      position: "bottom-right",
-    })
-  }
+  const epg = [
+    {
+      title: "3 días sin comprimir",
+      url: "/api/epg/mepg3.xml",
+    },
+    {
+      title: "3 días comprimido",
+      url: "/api/epg/mepg3.xml.gz",
+    },
+  ]
 
   return (
     <Box className="Home" bg={useColorModeValue("gray.50", "gray.900")}>
@@ -42,62 +40,57 @@ export const HomePage = () => {
           </Stack>
           <Box p={8}>
             <Stack spacing={4}>
-              <HStack spacing={4}>
-                <Box
-                  rounded={"lg"}
-                  bg={useColorModeValue("white", "gray.800")}
-                  _hover={{
-                    bg: useColorModeValue("gray.100", "gray.700"),
-                    cursor: "pointer",
-                    transitionProperty: "common",
-                    transitionDuration: "normal",
-                  }}
-                  boxShadow={"base"}
-                  p={6}
-                  onClick={() =>
-                    handleOnClickEpg(
-                      "https://mplus.up.railway.app/api/epg/mepg3.xml"
-                    )
-                  }
-                >
-                  <VStack>
-                    <Heading fontSize={"xl"} textAlign={"center"}>
-                      3 días sin comprimir
-                    </Heading>
-                    <Code>https://mplus.up.railway.app/api/epg/mepg3.xml</Code>
-                  </VStack>
-                </Box>
-                <Box
-                  rounded={"lg"}
-                  bg={useColorModeValue("white", "gray.800")}
-                  _hover={{
-                    bg: useColorModeValue("gray.100", "gray.700"),
-                    cursor: "pointer",
-                    transitionProperty: "common",
-                    transitionDuration: "normal",
-                  }}
-                  boxShadow={"base"}
-                  p={6}
-                  onClick={() =>
-                    handleOnClickEpg(
-                      "https://mplus.up.railway.app/api/epg/mepg3.xml.gz"
-                    )
-                  }
-                >
-                  <VStack>
-                    <Heading fontSize={"xl"} textAlign={"center"}>
-                      3 días comprimido
-                    </Heading>
-                    <Code>
-                      https://mplus.up.railway.app/api/epg/mepg3.xml.gz
-                    </Code>
-                  </VStack>
-                </Box>
-              </HStack>
+              <SimpleGrid columns={{base: 1, md: 2}} gap={6}>
+                {epg.map((e) => {
+                  return (
+                    <EpgCard key={e.title} title={e.title} url={e.url} />
+                  )
+                })}
+              </SimpleGrid>
             </Stack>
           </Box>
         </Stack>
       </Flex>
+    </Box>
+  )
+}
+
+const EpgCard = ({ title, url }: { title: string; url: string }) => {
+  const toast = useToast()
+
+  const handleOnClickEpg = (url: string) => {
+    toast.closeAll()
+    navigator.clipboard.writeText(url)
+    toast({
+      title: "Enlace copiado",
+      description: `Se ha copiado el enlace al portapapeles`,
+      status: "info",
+      duration: 3000,
+      isClosable: true,
+      position: "bottom-right",
+    })
+  }
+
+  return (
+    <Box
+      rounded={"lg"}
+      bg={useColorModeValue("white", "gray.800")}
+      _hover={{
+        bg: useColorModeValue("gray.100", "gray.700"),
+        cursor: "pointer",
+        transitionProperty: "common",
+        transitionDuration: "normal",
+      }}
+      boxShadow={"base"}
+      p={6}
+      onClick={() => handleOnClickEpg(url)}
+    >
+      <VStack>
+        <Heading fontSize={"xl"} textAlign={"center"}>
+          {title}
+        </Heading>
+        <Code>{url}</Code>
+      </VStack>
     </Box>
   )
 }
